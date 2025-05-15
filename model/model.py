@@ -19,10 +19,11 @@ class Model:
         self._bestPath = []
         self._bestCost = 0
 
-        parziale = [source]
+        parziale = [source] #so che deve partire da source
 
-        for n in self._graph.neighbors(source):
-            if parziale[-0].classification == n.classification:
+        for n in self._graph.neighbors(source): #considera solo i vicini di source
+            if parziale[-0].classification == n.classification: #deve considerare solo i nodi
+                                                                # con la stessa classification
                 parziale.append(n)
                 self._ricorsione(parziale, lun)
                 parziale.pop()
@@ -33,10 +34,12 @@ class Model:
         if len(parziale) == lun:
             #allora parziale ha la lunghezza desiderata,
             # verifico se è una soluzione migliore,
-            # ed in ogni caso esco
-            if self.costo(parziale) > self._bestCost:
+            # e in ogni caso esco
+            if self.costo(parziale) > self._bestCost: #se ho trovato una soluzione migliore di quella salvata al
+                                                      # momento (quindi con un costo maggiore),
+                                                      #la salvo, altrimenti esco solamente dalla funzione
                 self._bestCost = self.costo(parziale)
-                self._bestPath = copy.deepcopy(parziale)
+                self._bestPath = copy.deepcopy(parziale) #devo fare la deepcopy altrimenti copio solo un riferimento
             return
 
         # se arrivo qui, allora parziale può ancora ammettere altri nodi
@@ -48,8 +51,8 @@ class Model:
 
     def costo(self, listObjects):
         totCosto = 0
-        for i in range(0, len(listObjects)-1):
-            totCosto += self._graph[listObjects[i]][listObjects[i+1]]["weight"]
+        for i in range(0, len(listObjects)-1): #perchè numArchi= numNodi-1
+            totCosto += self._graph[listObjects[i]][listObjects[i+1]]["weight"]#sto ciclando sugli archi
         return totCosto
 
     def getInfoConnessa(self, idInput):
